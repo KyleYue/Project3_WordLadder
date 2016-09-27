@@ -25,20 +25,19 @@ import static org.junit.Assert.*;
  */
 public class UnitTest {
 
-    @Test
+    @Test(timeout = 30000)
     public void testParse() {
         Main.initialize();
         int x = 0;
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testGetWordLadderDFS() {
         Main.initialize();
-        ArrayList<String> ladder = Main.getWordLadderDFS("stone", "money");
-        int x  = 0;
+        ArrayList<String> ladder = Main.getWordLadderDFS("smart", "stars");
     }
 
-    @Test
+    @Test(timeout = 30000)
     public void testCountDiff() {
         Assert.assertEquals(2, Main.getDifference("apple", "apppp"));
         Assert.assertEquals(5, Main.getDifference("11111", "apppp"));
