@@ -35,7 +35,8 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		
+		printLadder(getWordLadderBFS("smart", "money"));
+		//System.out.println(isNeighbor("toney","toney"));
 		// TODO methods to read in words, output ladder
 	}
 	
@@ -70,7 +71,8 @@ public class Main {
 		Queue<String> q = new LinkedList<String>();
 		Set<String> visited = new HashSet<String>();
 		HashMap<String, String> connect = new HashMap<String,String>();
-		ArrayList<String> neighbors = new ArrayList<String>();
+		ArrayList<String> neighbors;
+		Iterator<String> itr;
 		String current,next;
 		q.add(start);
 		while(!q.isEmpty()){
@@ -81,7 +83,7 @@ public class Main {
 				break;
 			}
 			neighbors = getNeighbors(current);
-			Iterator<String> itr = neighbors.iterator();
+			itr = neighbors.iterator();
 			while(itr.hasNext()){
 				next = (String)itr.next();
 				if(!visited.contains(next)){
@@ -101,10 +103,11 @@ public class Main {
     	Set<String> dict = makeDictionary();
     	ArrayList<String> neighbors = new ArrayList<String>();
     	Iterator itr= dict.iterator();
+    	String next;
     	while(itr.hasNext()){
-    		String next = (String) itr.next();
+    		next = (String) itr.next();
     		if(isNeighbor(word,next.toLowerCase()))
-    			neighbors.add(next);
+    			neighbors.add(next.toLowerCase());
     	}
     	return neighbors;
     }
@@ -138,7 +141,7 @@ public class Main {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			infile = new Scanner (new File("five_letter_words.txt"));
+			infile = new Scanner (new File(Main.class.getResource("five_letter_words.txt").getPath()));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
@@ -158,6 +161,7 @@ public class Main {
 	
 	public static void printLadder(ArrayList<String> ladder){
 		int ladderHeight = ladder.size();
+		System.out.println(ladder.toString());
 		if(ladderHeight <2){
 			System.out.println("Invalid ladder");
 			return;
