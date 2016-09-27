@@ -37,9 +37,6 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		printLadder(getWordLadderBFS("books", "money"));
-		//System.out.println(getNeighbors("honey"));
-		// TODO methods to read in words, output ladder
 	}
 	
 	public static void initialize() {
@@ -66,7 +63,12 @@ public class Main {
 		
 		return null; // replace this line later with real return
 	}
-	
+	/**
+	 * Breadth first search for a word ladder between the start word and the end word.
+	 * @param start	the start word
+	 * @param end	the end word
+	 * @return	a ArrayList of word ladder if it exists, otherwise returns a empty ArrayList.
+	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		Queue<String> q = new LinkedList<String>();
 		Set<String> visited = new HashSet<String>();
@@ -122,6 +124,8 @@ public class Main {
     
     /**
      * Test if two words are neighbors.
+     * @param word1 word to be tested.
+     * @param word2 word to be tested.
      * @return	true if two words are neighbors.
      */
     private static boolean isNeighbor(String word1, String word2){
@@ -137,7 +141,7 @@ public class Main {
     
     /**
      * Construct a ladder from a map, the key and value are neighboring words.
-     * @param map with neighboring words.
+     * @param map a map with neighboring words.
      * @param endWord the end word.
      * @return ArrayList with of the word ladder
      */
@@ -156,8 +160,8 @@ public class Main {
     }
     
     /**
-     * Reverse a arraylist
-     * @param list to be reversed
+     * Reverse a arraylist.
+     * @param list list to be reversed
      * @return reversed list
      */
     
