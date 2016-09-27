@@ -38,9 +38,6 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		printLadder(getWordLadderBFS("smart", "money"));
-		//System.out.println(isNeighbor("toney","toney"));
-		// TODO methods to read in words, output ladder
 	}
 	
 	public static void initialize() {
@@ -114,6 +111,7 @@ public class Main {
 		return smallest;
 	}
 
+
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		Queue<String> q = new LinkedList<String>();
 		Set<String> visited = new HashSet<String>();
@@ -121,12 +119,13 @@ public class Main {
 		ArrayList<String> neighbors;
 		Iterator<String> itr;
 		String current,next;
+		boolean ladderFound=false;
 		q.add(start);
+		visited.add(start);
 		while(!q.isEmpty()){
 			current=(String)q.poll();
-			visited.add(current);
 			if(current.equals(end)){
-				connect.put(end, current);
+				ladderFound=true;
 				break;
 			}
 			neighbors = getNeighbors(current);
@@ -134,12 +133,18 @@ public class Main {
 			while(itr.hasNext()){
 				next = (String)itr.next();
 				if(!visited.contains(next)){
+					visited.add(next);
 					q.add(next);
 					connect.put(next, current);
 				}
 			}
 		}
-		return getLadder(connect,end); // replace this line later with real return
+		if(ladderFound)
+			return getLadder(connect,end);
+		else{
+			System.out.println("no word ladder can be found between " + start+" and "+end+".");
+			return null;
+		}
 	}
 
 	public static int getDifference(String start, String end){
@@ -186,6 +191,8 @@ public class Main {
     
     /**
      * Test if two words are neighbors.
+     * @param word1 word to be tested.
+     * @param word2 word to be tested.
      * @return	true if two words are neighbors.
      */
     private static boolean isNeighbor(String word1, String word2){
@@ -199,14 +206,39 @@ public class Main {
     	return counter==1;
     }
     
+    /**
+     * Construct a ladder from a map, the key and value are neighboring words.
+     * @param map a map with neighboring words.
+     * @param endWord the end word.
+     * @return ArrayList with of the word ladder
+     */
     private static ArrayList<String> getLadder(HashMap<String, String> map, String endWord){
     	 ArrayList<String> ladder = new  ArrayList<String>();
     	 String key = endWord;
+    	 String next;
     	 ladder.add(key);
     	 while(map.containsKey(key)){
-    		 ladder.add(map.get(key));
+    		 next = map.remove(key);
+    		 ladder.add(next);
+    		 key=next;
     	 }
-    	return ladder;
+
+    	return reverse(ladder);
+    }
+    
+    /**
+     * Reverse a arraylist.
+     * @param list list to be reversed
+     * @return reversed list
+     */
+    
+    private static ArrayList<String> reverse(ArrayList<String> list){
+	   	 ArrayList<String> reverse= new ArrayList<String>();
+	   	 int size = list.size();
+	   	 for(int i =0; i<size;i++){
+	   		 reverse.add(list.get(size-1-i));
+	   	 }
+	   	 return reverse;
     }
     
 	public static Set<String>  makeDictionary () {
@@ -226,23 +258,18 @@ public class Main {
 	}
 	
 	/**
-	 * @param	ladder  word ladder between the start and the finish word, including the start and finish word.
+	 * @param	ladder.  word ladder between the start and the finish word, including the start and finish word.
 	 * ladder size small than 2 indicates a code problem. The method will return after printing out a 
 	 * "Invalid ladder" message. 
 	 */
 	
 	public static void printLadder(ArrayList<String> ladder){
 		int ladderHeight = ladder.size();
-		System.out.println(ladder.toString());
-		if(ladderHeight <2){
-			System.out.println("Invalid ladder");
-			return;
-		}
-		if(ladderHeight==2){
-			System.out.println("no word ladder can be found between <start> and <finish>.");
-		}else{
-			System.out.println("a 8-rung word ladder exists between smart and money.");
-			for(int i=1; i<ladderHeight-1; i++){
+		if(ladderHeight<2)
+			throw new IllegalArgumentException("Illegal ladder arraylist input, ladder length shuold be larger than 1.");
+		else{
+			System.out.println("a "+(ladderHeight-2)+"-rung word ladder exists between "+ladder.get(0)+" and "+ladder.get(ladder.size()-1)+" .");
+			for(int i=0; i<ladderHeight; i++){
 				System.out.println(ladder.get(i));
 			}
 		}
