@@ -14,6 +14,7 @@
 
 
 package assignment3;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.io.*;
 
@@ -53,22 +54,64 @@ public class Main {
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
 		// TO DO
-		return null;
+		return parseLine(keyboard.nextLine());
 	}
-	
+
+	public static ArrayList<String> parseLine(String line) {
+		ArrayList<String> inputs = new ArrayList<String>(Arrays.asList(line.split(" ")));
+		for (String word: inputs) {
+			if(word.equals("/quit")){
+				return new ArrayList<String>();
+			}
+		}
+		return inputs;
+	}
+
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
-		
-		return null; // replace this line later with real return
+		Set<String> visited = new HashSet<>();
+		ArrayList<String> ladder = new ArrayList<>();
+		int diff = getDifference(start, end);
+		ArrayList<String> list = getWordLadderDFSRec(start, end, diff, ladder, visited);
+		return list;
 	}
-	/**
-	 * Breadth first search for a word ladder between the start word and the end word.
-	 * @param start	the start word
-	 * @param end	the end word
-	 * @return	a ArrayList of word ladder if it exists, otherwise returns a empty ArrayList.
-	 */
+
+	private static ArrayList<String> getWordLadderDFSRec(String start, String end, int lastDiff, ArrayList<String> ladder, Set<String> visited){
+		visited.add(start);
+		ArrayList<ArrayList<String>> allLadders = new ArrayList<>();
+		ArrayList<String> neighbors = getNeighbors(start);
+		String[] filteredNeighbors = filterOutMoreDifferentiatedStrings(end, neighbors.toArray(new String[neighbors.size()]), lastDiff);
+		for(String newNode : filteredNeighbors){
+			ArrayList<String> copiedLadder = new ArrayList<String>(ladder);
+			copiedLadder.add(newNode);
+			if(newNode.equals(end)){
+				return copiedLadder;
+			}
+			if(!visited.contains(newNode)){
+				allLadders.add(getWordLadderDFSRec(newNode, end, getDifference(end,newNode), copiedLadder, new HashSet<>(visited)));
+			}
+		}
+
+		//find the smallest size ladder
+		ArrayList<String> smallest = null;
+		if(allLadders.size()>0){
+			for (ArrayList<String> eachLadder: allLadders) {
+				if(eachLadder == null){
+					continue;
+				}
+
+
+				if(smallest == null || eachLadder.size() < smallest.size()){
+					smallest = eachLadder;
+				}
+			}
+		}
+		return smallest;
+	}
+
+
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		Queue<String> q = new LinkedList<String>();
 		Set<String> visited = new HashSet<String>();
@@ -83,7 +126,6 @@ public class Main {
 			current=(String)q.poll();
 			if(current.equals(end)){
 				ladderFound=true;
-				//connect.put(end, current);
 				break;
 			}
 			neighbors = getNeighbors(current);
@@ -103,14 +145,39 @@ public class Main {
 			System.out.println("no word ladder can be found between " + start+" and "+end+".");
 			return null;
 		}
-			
 	}
+
+	public static int getDifference(String start, String end){
+		int size1 = start.length();
+		int size2 = end.length();
+		int smallerSize = size1 > size2 ? size2 : size1;
+		int count = 0;
+		for (int i = 0; i < smallerSize; i ++) {
+			if(start.charAt(i) != end.charAt(i)){
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public static String[] filterOutMoreDifferentiatedStrings(String start, String[] list, int lastDiff){
+		ArrayList<String> result = new ArrayList<>();
+		for (String tar: list) {
+			if(getDifference(start, tar) <= lastDiff){
+				result.add(tar);
+			}
+		}
+		String[] arr = new String[result.size()];
+		return result.toArray(arr);
+	}
+
     /**
      * Returns a list of neighbors of word. Neighbors different from word by only 1 letter.
-     * @param 	input word. 
+     * @param  word
      * @return	a list of neighbors.
      */
     private static ArrayList<String> getNeighbors(String word){
+    	Set<String> dict = makeDictionary();
     	ArrayList<String> neighbors = new ArrayList<String>();
     	Iterator itr= dict.iterator();
     	String next;

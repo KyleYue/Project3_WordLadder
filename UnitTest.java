@@ -13,7 +13,10 @@
  */
 package assignment3;
 
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -26,5 +29,29 @@ public class UnitTest {
     public void testParse() {
         Main.initialize();
         int x = 0;
+    }
+
+    @Test
+    public void testGetWordLadderDFS() {
+        Main.initialize();
+        ArrayList<String> ladder = Main.getWordLadderDFS("stone", "money");
+        int x  = 0;
+    }
+
+    @Test
+    public void testCountDiff() {
+        Assert.assertEquals(2, Main.getDifference("apple", "apppp"));
+        Assert.assertEquals(5, Main.getDifference("11111", "apppp"));
+        Assert.assertEquals(1, Main.getDifference("count", "cbunt"));
+        Assert.assertEquals(4, Main.getDifference("apple", "sspss"));
+        Assert.assertEquals(5, Main.getDifference("apple", "sssss"));
+        Assert.assertEquals(3, Main.getDifference("apple", "apsss"));
+    }
+
+    @Test
+    public void testFilter() {
+        Assert.assertArrayEquals(new String[]{"apple", "appll"}, Main.filterOutMoreDifferentiatedStrings("apple", new String[]{"apppp", "apple", "appll"}, 1));
+        Assert.assertArrayEquals(new String[]{"apppp", "apple", "appll"}, Main.filterOutMoreDifferentiatedStrings("apple", new String[]{"apppp", "apple", "appll"}, 2));
+        Assert.assertArrayEquals(new String[]{"apsss"}, Main.filterOutMoreDifferentiatedStrings("apple", new String[]{"sspss", "sssss", "apsss"}, 3));
     }
 }
