@@ -24,6 +24,7 @@ public class UnitTest {
 
     @Test
     public void testParse() {
-        
+        Main.initialize();
+        int x = 0;
     }
 }

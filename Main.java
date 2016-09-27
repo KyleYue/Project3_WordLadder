@@ -5,8 +5,8 @@
  * XL5432
  * 16480
  * Yuankai Yue
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * yy7347
+ * 16465
  * Slip days used: <0>
  * Git URL:
  * Fall 2016
@@ -20,7 +20,9 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
-	
+
+	static Set<String> dict;
+
 	public static void main(String[] args) throws Exception {
 		
 		Scanner kb;	// input Scanner for commands
@@ -43,6 +45,7 @@ public class Main {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		dict = makeDictionary();
 	}
 	
 	/**
@@ -59,18 +62,12 @@ public class Main {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
-		// TODO some code
-		Set<String> dict = makeDictionary();
-		// TODO more code
 		
 		return null; // replace this line later with real return
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
-		
-		// TODO some code
-		Set<String> dict = makeDictionary();
-		// TODO more code
+
 		
 		return null; // replace this line later with real return
 	}
@@ -79,7 +76,7 @@ public class Main {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			infile = new Scanner (new File("five_letter_words.txt"));
+			infile = new Scanner (new File(Main.class.getResource("five_letter_words.txt").getPath()));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
