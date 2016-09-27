@@ -5,8 +5,8 @@
  * XL5432
  * 16480
  * Yuankai Yue
- * <yy7347>
- * <16465>
+ * yy7347
+ * 16465
  * Slip days used: <0>
  * Git URL: https://github.com/KyleYue/Project3_WordLadder
  * Fall 2016
@@ -20,7 +20,9 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
-	
+
+	static Set<String> dict;
+
 	public static void main(String[] args) throws Exception {
 		
 		Scanner kb;	// input Scanner for commands
@@ -44,6 +46,7 @@ public class Main {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		dict = makeDictionary();
 	}
 	
 	/**
@@ -60,9 +63,6 @@ public class Main {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
-		// TODO some code
-		Set<String> dict = makeDictionary();
-		// TODO more code
 		
 		return null; // replace this line later with real return
 	}
