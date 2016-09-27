@@ -14,7 +14,6 @@
 
 
 package assignment3;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.io.*;
 
@@ -73,42 +72,36 @@ public class Main {
 		// Return empty list if no ladder.
 		Set<String> visited = new HashSet<>();
 		ArrayList<String> ladder = new ArrayList<>();
+		ladder.add(start);
 		int diff = getDifference(start, end);
-		ArrayList<String> list = getWordLadderDFSRec(start, end, diff, ladder, visited);
+		ArrayList<String> list = getWordLadderDFSRec(start, end, diff, visited);
 		return list;
 	}
 
-	private static ArrayList<String> getWordLadderDFSRec(String start, String end, int lastDiff, ArrayList<String> ladder, Set<String> visited){
+	private static ArrayList<String> getWordLadderDFSRec(String start, String end, int lastDiff, Set<String> visited){
+		if(start.equals(end)){
+			ArrayList<String> ladder = new ArrayList<>();
+			ladder.add(start);
+			return ladder;
+		}
+		if(visited.contains(start)){
+			return null;
+		}
+
 		visited.add(start);
-		ArrayList<ArrayList<String>> allLadders = new ArrayList<>();
+
 		ArrayList<String> neighbors = getNeighbors(start);
 		String[] filteredNeighbors = filterOutMoreDifferentiatedStrings(end, neighbors.toArray(new String[neighbors.size()]), lastDiff);
+
 		for(String newNode : filteredNeighbors){
-			ArrayList<String> copiedLadder = new ArrayList<String>(ladder);
-			copiedLadder.add(newNode);
-			if(newNode.equals(end)){
-				return copiedLadder;
+			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, getDifference(newNode, end), visited);
+			if(fromChildren == null){
+				continue;
 			}
-			if(!visited.contains(newNode)){
-				allLadders.add(getWordLadderDFSRec(newNode, end, getDifference(end,newNode), copiedLadder, new HashSet<>(visited)));
-			}
+			fromChildren.add(0, start);
+			return fromChildren;
 		}
-
-		//find the smallest size ladder
-		ArrayList<String> smallest = null;
-		if(allLadders.size()>0){
-			for (ArrayList<String> eachLadder: allLadders) {
-				if(eachLadder == null){
-					continue;
-				}
-
-
-				if(smallest == null || eachLadder.size() < smallest.size()){
-					smallest = eachLadder;
-				}
-			}
-		}
-		return smallest;
+		return null;
 	}
 
 
@@ -258,7 +251,7 @@ public class Main {
 	}
 	
 	/**
-	 * @param	ladder.  word ladder between the start and the finish word, including the start and finish word.
+	 * @param	ladder  word ladder between the start and the finish word, including the start and finish word.
 	 * ladder size small than 2 indicates a code problem. The method will return after printing out a 
 	 * "Invalid ladder" message. 
 	 */
