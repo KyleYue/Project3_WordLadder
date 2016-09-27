@@ -8,7 +8,7 @@
  * yy7347
  * 16465
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/KyleYue/Project3_WordLadder
  * Fall 2016
  */
 
@@ -37,7 +37,8 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		
+		printLadder(getWordLadderBFS("smart", "money"));
+		//System.out.println(isNeighbor("toney","toney"));
 		// TODO methods to read in words, output ladder
 	}
 	
@@ -67,10 +68,74 @@ public class Main {
 	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
-
-		
-		return null; // replace this line later with real return
+		Queue<String> q = new LinkedList<String>();
+		Set<String> visited = new HashSet<String>();
+		HashMap<String, String> connect = new HashMap<String,String>();
+		ArrayList<String> neighbors;
+		Iterator<String> itr;
+		String current,next;
+		q.add(start);
+		while(!q.isEmpty()){
+			current=(String)q.poll();
+			visited.add(current);
+			if(current.equals(end)){
+				connect.put(end, current);
+				break;
+			}
+			neighbors = getNeighbors(current);
+			itr = neighbors.iterator();
+			while(itr.hasNext()){
+				next = (String)itr.next();
+				if(!visited.contains(next)){
+					q.add(next);
+					connect.put(next, current);
+				}
+			}
+		}
+		return getLadder(connect,end); // replace this line later with real return
 	}
+    /**
+     * Returns a list of neighbors of word. Neighbors different from word by only 1 letter.
+     * @param 	input word. 
+     * @return	a list of neighbors.
+     */
+    private static ArrayList<String> getNeighbors(String word){
+    	Set<String> dict = makeDictionary();
+    	ArrayList<String> neighbors = new ArrayList<String>();
+    	Iterator itr= dict.iterator();
+    	String next;
+    	while(itr.hasNext()){
+    		next = (String) itr.next();
+    		if(isNeighbor(word,next.toLowerCase()))
+    			neighbors.add(next.toLowerCase());
+    	}
+    	return neighbors;
+    }
+    
+    /**
+     * Test if two words are neighbors.
+     * @return	true if two words are neighbors.
+     */
+    private static boolean isNeighbor(String word1, String word2){
+    	int counter=0;
+    	char[] word1Char = word1.toCharArray();
+    	char[] word2Char = word2.toCharArray();
+    	for(int i=0; i<word1.length(); i++){
+    		if(word1Char[i]!=word2Char[i])
+    			counter++;
+    	}
+    	return counter==1;
+    }
+    
+    private static ArrayList<String> getLadder(HashMap<String, String> map, String endWord){
+    	 ArrayList<String> ladder = new  ArrayList<String>();
+    	 String key = endWord;
+    	 ladder.add(key);
+    	 while(map.containsKey(key)){
+    		 ladder.add(map.get(key));
+    	 }
+    	return ladder;
+    }
     
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
@@ -88,8 +153,27 @@ public class Main {
 		return words;
 	}
 	
-	public static void printLadder(ArrayList<String> ladder) {
-		
+	/**
+	 * @param	ladder.  word ladder between the start and the finish word, including the start and finish word.
+	 * ladder size small than 2 indicates a code problem. The method will return after printing out a 
+	 * "Invalid ladder" message. 
+	 */
+	
+	public static void printLadder(ArrayList<String> ladder){
+		int ladderHeight = ladder.size();
+		System.out.println(ladder.toString());
+		if(ladderHeight <2){
+			System.out.println("Invalid ladder");
+			return;
+		}
+		if(ladderHeight==2){
+			System.out.println("no word ladder can be found between <start> and <finish>.");
+		}else{
+			System.out.println("a 8-rung word ladder exists between smart and money.");
+			for(int i=1; i<ladderHeight-1; i++){
+				System.out.println(ladder.get(i));
+			}
+		}
 	}
 	// TODO
 	// Other private static methods here
