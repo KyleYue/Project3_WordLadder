@@ -47,7 +47,7 @@ public class Main {
 		System.out.println("Depth first search: ");
 		printLadder(getWordLadderDFS(inputs.get(0),inputs.get(1)));
 		*/
-		printLadder(getWordLadderBFS("bazoo","bazoo"));
+		//printLadder(getWordLadderBFS("bazoo","bazoo"));
 	}
 	
 	public static void initialize() {
