@@ -65,7 +65,7 @@ public class UnitTest {
     	String[] dictString =dict.toArray(new String[dict.size()]);
     	int BFSNullCounter=0;
     	int DFSNullCounter=0;
-    	for(int i=0; i<0; i++){
+    	for(int i=0; i<10; i++){
         	int i1 = randomGenerator.nextInt(dictString.length);
         	int i2 = randomGenerator.nextInt(dictString.length);
         	String word1 = dictString[i1].toLowerCase();

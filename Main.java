@@ -163,7 +163,6 @@ public class Main {
 		if(ladderFound)
 			return getLadder(connect,end);
 		else{
-			System.out.println("null");
 			return null;
 		}
 	}
