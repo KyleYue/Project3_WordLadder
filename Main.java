@@ -38,6 +38,7 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
+		/*
 		ArrayList<String> inputs = parse(kb);
 		if (inputs.size()<2)
 			return;
@@ -45,6 +46,8 @@ public class Main {
 		printLadder(getWordLadderBFS(inputs.get(0),inputs.get(1)));
 		System.out.println("Depth first search: ");
 		printLadder(getWordLadderDFS(inputs.get(0),inputs.get(1)));
+		*/
+		printLadder(getWordLadderBFS("bazoo","bazoo"));
 	}
 	
 	public static void initialize() {
@@ -123,6 +126,14 @@ public class Main {
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		START = start;
 		END = end;
+		if(start==null || end==null)
+			return null;
+		if(start.equals(end)){
+			ArrayList<String> output = new ArrayList<String>();
+			output.add(start);
+			output.add(end);
+			return output;
+		}
 		Queue<String> q = new LinkedList<String>();
 		Set<String> visited = new HashSet<String>();
 		HashMap<String, String> connect = new HashMap<String,String>();
@@ -152,6 +163,7 @@ public class Main {
 		if(ladderFound)
 			return getLadder(connect,end);
 		else{
+			System.out.println("null");
 			return null;
 		}
 	}
