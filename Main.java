@@ -38,7 +38,7 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		/*
+		
 		ArrayList<String> inputs = parse(kb);
 		if (inputs.size()<2)
 			return;
@@ -46,14 +46,14 @@ public class Main {
 		printLadder(getWordLadderBFS(inputs.get(0),inputs.get(1)));
 		System.out.println("Depth first search: ");
 		printLadder(getWordLadderDFS(inputs.get(0),inputs.get(1)));
-		*/
-		//printLadder(getWordLadderBFS("bazoo","bazoo"));
 	}
 	
 	public static void initialize() {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		START="notAssigned";
+		END="notAssigned";
 		dict = makeDictionary();
 	}
 	
@@ -68,7 +68,7 @@ public class Main {
 	}
 
 	public static ArrayList<String> parseLine(String line) {
-		ArrayList<String> inputs = new ArrayList<String>(Arrays.asList((line.toLowerCase()).split(" ")));
+		ArrayList<String> inputs = new ArrayList<String>(Arrays.asList((line.toLowerCase()).split("[^a-zA-Z/]+")));
 		for (String word: inputs) {
 			if(word.equals("/quit")){
 				return new ArrayList<String>();
@@ -83,6 +83,14 @@ public class Main {
 		// Return empty list if no ladder.
 		START = start;
 		END = end;
+		if(start==null || end==null)
+			return null;
+		if(start.equals(end)){
+			ArrayList<String> output = new ArrayList<String>();
+			output.add(start);
+			output.add(end);
+			return output;
+		}
 		Set<String> visited = new HashSet<>();
 		ArrayList<String> ladder = new ArrayList<>();
 		ladder.add(start);
