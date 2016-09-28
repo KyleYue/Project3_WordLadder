@@ -22,6 +22,7 @@ public class Main {
 	// static variables and constants only here.
 
 	static Set<String> dict;
+	static String START,END;
 
 	public static void main(String[] args) throws Exception {
 		
@@ -37,6 +38,13 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
+		ArrayList<String> inputs = parse(kb);
+		if (inputs.size()<2)
+			return;
+		System.out.println("Breadth first search: ");
+		printLadder(getWordLadderBFS(inputs.get(0),inputs.get(1)));
+		System.out.println("Depth first search: ");
+		printLadder(getWordLadderDFS(inputs.get(0),inputs.get(1)));
 	}
 	
 	public static void initialize() {
@@ -57,7 +65,7 @@ public class Main {
 	}
 
 	public static ArrayList<String> parseLine(String line) {
-		ArrayList<String> inputs = new ArrayList<String>(Arrays.asList(line.split(" ")));
+		ArrayList<String> inputs = new ArrayList<String>(Arrays.asList((line.toLowerCase()).split(" ")));
 		for (String word: inputs) {
 			if(word.equals("/quit")){
 				return new ArrayList<String>();
@@ -70,6 +78,8 @@ public class Main {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
+		START = start;
+		END = end;
 		Set<String> visited = new HashSet<>();
 		ArrayList<String> ladder = new ArrayList<>();
 		ladder.add(start);
@@ -103,9 +113,16 @@ public class Main {
 		}
 		return null;
 	}
-
-
+	
+	/**
+	 * Get the word Ladder from the start word and the end word.
+	 * @param start the start word of the ladder.
+	 * @param end	the end word of the ladder.
+	 * @return		the an Arraylist<String> of word ladder.
+	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
+		START = start;
+		END = end;
 		Queue<String> q = new LinkedList<String>();
 		Set<String> visited = new HashSet<String>();
 		HashMap<String, String> connect = new HashMap<String,String>();
@@ -135,11 +152,59 @@ public class Main {
 		if(ladderFound)
 			return getLadder(connect,end);
 		else{
-			System.out.println("no word ladder can be found between " + start+" and "+end+".");
 			return null;
 		}
 	}
-
+    
+    /**
+     * Construct a dictionary
+     * @return
+     */
+	public static Set<String>  makeDictionary () {
+		Set<String> words = new HashSet<String>();
+		Scanner infile = null;
+		try {
+			infile = new Scanner (new File(Main.class.getResource("five_letter_words.txt").getPath()));
+		} catch (FileNotFoundException e) {
+			System.out.println("Dictionary File not Found!");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		while (infile.hasNext()) {
+			words.add(infile.next().toUpperCase());
+		}
+		return words;
+	}
+	
+	/**
+	 * @param	ladder  word ladder between the start and the finish word, including the start and finish word.
+	 * ladder size small than 2 indicates a code problem. The method will return after printing out a 
+	 * "Invalid ladder" message. 
+	 */
+	
+	public static void printLadder(ArrayList<String> ladder){
+		if(ladder==null){
+			System.out.println("no word ladder can be found between " + START+" and "+END+".");
+			return;
+		}
+		int ladderHeight = ladder.size();
+		if(ladderHeight<2)
+			throw new IllegalArgumentException("Illegal ladder arraylist input, ladder length shuold be larger than 1.");
+		else{
+			System.out.println("a "+(ladderHeight-2)+"-rung word ladder exists between "+START+" and "+END +" .");
+			for(int i=0; i<ladderHeight; i++){
+				System.out.println(ladder.get(i));
+			}
+		}
+	}
+	// TODO
+	// Other private static methods here
+	/**
+	 * Calculate the number of differences between two words.
+	 * @param start	the start word
+	 * @param end	the end word
+	 * @return		difference between the start word and the end word.
+	 */
 	public static int getDifference(String start, String end){
 		int size1 = start.length();
 		int size2 = end.length();
@@ -170,7 +235,6 @@ public class Main {
      * @return	a list of neighbors.
      */
     private static ArrayList<String> getNeighbors(String word){
-    	Set<String> dict = makeDictionary();
     	ArrayList<String> neighbors = new ArrayList<String>();
     	Iterator itr= dict.iterator();
     	String next;
@@ -233,40 +297,5 @@ public class Main {
 	   	 }
 	   	 return reverse;
     }
-    
-	public static Set<String>  makeDictionary () {
-		Set<String> words = new HashSet<String>();
-		Scanner infile = null;
-		try {
-			infile = new Scanner (new File(Main.class.getResource("five_letter_words.txt").getPath()));
-		} catch (FileNotFoundException e) {
-			System.out.println("Dictionary File not Found!");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		while (infile.hasNext()) {
-			words.add(infile.next().toUpperCase());
-		}
-		return words;
-	}
-	
-	/**
-	 * @param	ladder  word ladder between the start and the finish word, including the start and finish word.
-	 * ladder size small than 2 indicates a code problem. The method will return after printing out a 
-	 * "Invalid ladder" message. 
-	 */
-	
-	public static void printLadder(ArrayList<String> ladder){
-		int ladderHeight = ladder.size();
-		if(ladderHeight<2)
-			throw new IllegalArgumentException("Illegal ladder arraylist input, ladder length shuold be larger than 1.");
-		else{
-			System.out.println("a "+(ladderHeight-2)+"-rung word ladder exists between "+ladder.get(0)+" and "+ladder.get(ladder.size()-1)+" .");
-			for(int i=0; i<ladderHeight; i++){
-				System.out.println(ladder.get(i));
-			}
-		}
-	}
-	// TODO
-	// Other private static methods here
+   
 }

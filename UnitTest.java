@@ -5,10 +5,10 @@
  * XL5432
  * 16480
  * Yuankai Yue
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * yy7347
+ * 16465
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/KyleYue/Project3_WordLadder
  * Fall 2016
  */
 package assignment3;
@@ -16,7 +16,10 @@ package assignment3;
 import org.junit.Assert;
 import org.junit.Test;
 
+
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -53,4 +56,28 @@ public class UnitTest {
         Assert.assertArrayEquals(new String[]{"apppp", "apple", "appll"}, Main.filterOutMoreDifferentiatedStrings("apple", new String[]{"apppp", "apple", "appll"}, 2));
         Assert.assertArrayEquals(new String[]{"apsss"}, Main.filterOutMoreDifferentiatedStrings("apple", new String[]{"sspss", "sssss", "apsss"}, 3));
     }
+
+    @Test
+    public void testBFSAndDFS(){
+    	Random randomGenerator = new Random();
+    	Set<String> dict = Main.makeDictionary();
+    	Main.initialize();
+    	String[] dictString =dict.toArray(new String[dict.size()]);
+    	int BFSNullCounter=0;
+    	int DFSNullCounter=0;
+    	for(int i=0; i<30; i++){
+        	int i1 = randomGenerator.nextInt(dictString.length);
+        	int i2 = randomGenerator.nextInt(dictString.length);
+        	String word1 = dictString[i1].toLowerCase();
+        	String word2 = dictString[i2].toLowerCase();
+        	System.out.println(word1 +"   "+ word2);
+        	if(Main.getWordLadderBFS(word1,word2)==null)
+        		BFSNullCounter++;
+        	if(Main.getWordLadderDFS(word1,word2)==null)
+        		DFSNullCounter++;
+    	}
+    	System.out.println("BFS null times: "+BFSNullCounter +". DFS null times: "+DFSNullCounter+".");
+    	assertEquals(BFSNullCounter,DFSNullCounter);
+    }
+    
 }
