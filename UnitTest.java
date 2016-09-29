@@ -28,6 +28,13 @@ public class UnitTest {
 
     @Test
     public void testParse() {
+        String input = "hello world";
+        Scanner scan = new Scanner(input);
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("hello");
+        expected.add("world");
+        assertEquals(expected, Main.parse(scan));
+
     	ArrayList<String> words = Main.parse(new Scanner("start money"));
     	assertTrue(words.get(0).equals("start")&&words.get(1).equals("money"));
     	words = Main.parse(new Scanner("start			money"));
