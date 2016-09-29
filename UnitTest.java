@@ -34,10 +34,6 @@ public class UnitTest {
     	assertTrue(words.get(0).equals("start")&&words.get(1).equals("money"));
     	words = Main.parse(new Scanner("START MONEY"));
     	assertTrue(words.get(0).equals("start")&&words.get(1).equals("money"));
-    	//words = Main.parse(new Scanner("start  money  /quit"));
-    	//assertTrue(words.size()==0);
-    	//words = Main.parse(new Scanner("/Quit"));
-    	//assertTrue(words.size()==0);
     }
 
     @Test(timeout = 30000)
@@ -57,38 +53,7 @@ public class UnitTest {
         Assert.assertArrayEquals(new String[]{"appli", "apppp", "ppppp"}, Main.sortNeighbors("apple", new ArrayList<>(Arrays.asList(new String[]{"appli", "apppp", "ppppp"}))).toArray());
         Assert.assertArrayEquals(new String[]{"appli", "apppp", "apiii", "azzzz", "zzzzz"}, Main.sortNeighbors("apple", new ArrayList<>(Arrays.asList(new String[]{"zzzzz", "appli", "apppp", "apiii", "azzzz"}))).toArray());
     }
-/*
-    @Test
-    public void testPrintLadder(){
-        ArrayList<String> ladder = new ArrayList<String>();
-        Exception ex=null;
 
-        ladder.add("start");
-        try {
-            Main.printLadder(ladder);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertTrue(ex !=null);
-
-        ladder.add("money");
-        ex=null;
-        try {
-            Main.printLadder(ladder);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertEquals(ex,null);
-
-        ex=null;
-        try {
-            Main.printLadder(null);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertEquals(ex,null);
-    }
-*/
     @Test
     public void testBFSAndDFS(){
     	Random randomGenerator = new Random();
@@ -101,13 +66,11 @@ public class UnitTest {
         	int i2 = randomGenerator.nextInt(dictString.length);
         	String word1 = dictString[i1].toLowerCase();
         	String word2 = dictString[i2].toLowerCase();
-        	System.out.println(word1 +"   "+ word2);
         	if(Main.getWordLadderBFS(word1,word2).size()==0)
         		BFSNullCounter++;
         	if(Main.getWordLadderDFS(word1,word2).size()==0)
         		DFSNullCounter++;
     	}
-    	System.out.println("BFS null times: "+BFSNullCounter +". DFS null times: "+DFSNullCounter+".");
     	assertEquals(BFSNullCounter,DFSNullCounter);
     }
     
