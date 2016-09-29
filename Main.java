@@ -240,6 +240,8 @@ public class Main {
 		int ladderHeight = ladder.size();
 		if(ladderFound &&ladderHeight<2){
 			System.out.println("a 0-rung word ladder exists between "+START+" and "+END +".");
+			System.out.println(START);
+			System.out.println(END);
 			return;
 		}
 		if(ladderFound&&ladderHeight>=2){
