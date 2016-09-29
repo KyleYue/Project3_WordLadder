@@ -16,15 +16,9 @@ package assignment3;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-
 import java.util.*;
-
 import static org.junit.Assert.*;
 
-/**
- * Created by Eric on 9/27/16.
- */
 public class UnitTest {
 	@Before
 	public void setup(){
@@ -39,10 +33,6 @@ public class UnitTest {
     	assertTrue(words.get(0).equals("start")&&words.get(1).equals("money"));
     	words = Main.parse(new Scanner("START MONEY"));
     	assertTrue(words.get(0).equals("start")&&words.get(1).equals("money"));
-    	//words = Main.parse(new Scanner("start  money  /quit"));
-    	//assertTrue(words.size()==0);
-    	//words = Main.parse(new Scanner("/Quit"));
-    	//assertTrue(words.size()==0);
     }
 
     @Test(timeout = 30000)
@@ -64,44 +54,6 @@ public class UnitTest {
     }
 
     @Test
-    public void testPrintLadder(){
-        ArrayList<String> ladder = new ArrayList<String>();
-        Exception ex=null;
-        try {
-            Main.printLadder(ladder);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertTrue(ex !=null);
-
-        ladder.add("start");
-        ex=null;
-        try {
-            Main.printLadder(ladder);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertTrue(ex !=null);
-
-        ladder.add("money");
-        ex=null;
-        try {
-            Main.printLadder(ladder);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertEquals(ex,null);
-
-        ex=null;
-        try {
-            Main.printLadder(null);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertEquals(ex,null);
-    }
-
-    @Test
     public void testBFSAndDFS(){
     	Random randomGenerator = new Random();
     	Set<String> dict = Main.makeDictionary();
@@ -114,9 +66,9 @@ public class UnitTest {
         	String word1 = dictString[i1].toLowerCase();
         	String word2 = dictString[i2].toLowerCase();
         	System.out.println(word1 +"   "+ word2);
-        	if(Main.getWordLadderBFS(word1,word2)==null)
+        	if(Main.getWordLadderBFS(word1,word2).size()==0)
         		BFSNullCounter++;
-        	if(Main.getWordLadderDFS(word1,word2)==null)
+        	if(Main.getWordLadderDFS(word1,word2).size()==0)
         		DFSNullCounter++;
     	}
     	System.out.println("BFS null times: "+BFSNullCounter +". DFS null times: "+DFSNullCounter+".");
@@ -125,20 +77,20 @@ public class UnitTest {
     
     @Test 
     public void testBFS(){
-    	assertTrue(Main.getWordLadderBFS("start", "start")!=null);
-    	assertTrue(Main.getWordLadderBFS("bazoo", "habit")==null);
+    	assertTrue(Main.getWordLadderBFS("start", "start").size()==0);
+    	assertTrue(Main.getWordLadderBFS("bazoo", "habit").size()==0);
     	assertTrue(Main.getWordLadderBFS("smart", "money").contains("smart"));
     	assertTrue(Main.getWordLadderBFS("smart", "money").size()>2);
-    	assertTrue(Main.getWordLadderBFS("smart","smart").size()==2);
+    	assertTrue(Main.getWordLadderBFS("smart", "money").contains("money"));
     }
     
     @Test
     public void testDFS(){
-    	assertTrue(Main.getWordLadderDFS("start", "start")!=null);
-    	assertTrue(Main.getWordLadderDFS("bazoo", "habit")==null);
+    	assertTrue(Main.getWordLadderDFS("start", "start").size()==0);
+    	assertTrue(Main.getWordLadderDFS("bazoo", "habit").size()==0);
     	assertTrue(Main.getWordLadderDFS("smart", "money").contains("smart"));
     	assertTrue(Main.getWordLadderDFS("smart", "money").size()>2);
-    	assertTrue(Main.getWordLadderDFS("smart","smart").size()==2);
+    	assertTrue(Main.getWordLadderDFS("smart", "money").contains("money"));
     }
     
 
