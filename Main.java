@@ -20,10 +20,6 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
-
-	public static String startWord;
-	public static String endWord;
-
 	static Set<String> dict;
 	static String START,END;
 
@@ -71,8 +67,6 @@ public class Main {
 		if(results.size() == 0){
 			System.exit(0);
 		}
-		startWord = results.get(0);
-		endWord = results.get(1);
 		return results;
 	}
 
@@ -95,12 +89,11 @@ public class Main {
 		Set<String> visited = new HashSet<>();
 		ArrayList<String> ladder = new ArrayList<>();
 		ladder.add(start);
-		int diff = getDifference(start, end);
-		ArrayList<String> list = getWordLadderDFSRec(start, end, diff, visited);
+		ArrayList<String> list = getWordLadderDFSRec(start, end, visited);
 		return list;
 	}
 
-	private static ArrayList<String> getWordLadderDFSRec(String start, String end, int lastDiff, Set<String> visited){
+	private static ArrayList<String> getWordLadderDFSRec(String start, String end, Set<String> visited){
 		if(start.equals(end)){
 			ArrayList<String> ladder = new ArrayList<>();
 			ladder.add(start);
@@ -113,10 +106,10 @@ public class Main {
 		visited.add(start);
 
 		ArrayList<String> neighbors = getNeighbors(start);
-		ArrayList<String> filteredNeighbors = filterOutMoreDifferentiatedStrings(end, neighbors, lastDiff);
+		ArrayList<String> filteredNeighbors = filterOutMoreDifferentiatedStrings(end, neighbors);
 
 		for(String newNode : filteredNeighbors){
-			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, getDifference(newNode, end), visited);
+			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, visited);
 			if(fromChildren == null){
 				continue;
 			}
@@ -238,7 +231,7 @@ public class Main {
 		return count;
 	}
 
-	public static ArrayList<String> filterOutMoreDifferentiatedStrings(String end, ArrayList<String> list, int lastDiff){
+	public static ArrayList<String> filterOutMoreDifferentiatedStrings(String end, ArrayList<String> list){
 		//Comparator<String> comparator = Comparator.comparing(n -> getDifference(n, end));
 		Collections.sort(list, Comparator.comparing(n -> getDifference(n, end)));
 		return list;

@@ -90,37 +90,4 @@ public class UnitTest {
     	assertTrue(Main.getWordLadderBFS("smart", "money").size()>2);
     	assertTrue(Main.getWordLadderBFS("smart","smart").size()==2);
     }
-
-    @Test
-    public void testBFSAndDFS(){
-    	Random randomGenerator = new Random();
-    	Set<String> dict = Main.makeDictionary();
-    	Main.initialize();
-    	String[] dictString =dict.toArray(new String[dict.size()]);
-    	int BFSNullCounter=0;
-    	int DFSNullCounter=0;
-    	for(int i=0; i<10; i++){
-        	int i1 = randomGenerator.nextInt(dictString.length);
-        	int i2 = randomGenerator.nextInt(dictString.length);
-        	String word1 = dictString[i1].toLowerCase();
-        	String word2 = dictString[i2].toLowerCase();
-        	System.out.println(word1 +"   "+ word2);
-        	if(Main.getWordLadderBFS(word1,word2)==null)
-        		BFSNullCounter++;
-        	if(Main.getWordLadderDFS(word1,word2)==null)
-        		DFSNullCounter++;
-    	}
-    	System.out.println("BFS null times: "+BFSNullCounter +". DFS null times: "+DFSNullCounter+".");
-    	assertEquals(BFSNullCounter,DFSNullCounter);
-    }
-    
-    @Test 
-    public void testBFS(){
-    	Main.initialize();
-    	assertTrue(Main.getWordLadderBFS("start", "start")!=null);
-    	assertTrue(Main.getWordLadderBFS("bazoo", "habit")==null);
-    	assertTrue(Main.getWordLadderBFS("smart", "money").contains("smart"));
-    	assertTrue(Main.getWordLadderBFS("smart", "money").size()>2);
-    	assertTrue(Main.getWordLadderBFS("smart","smart").size()==2);
-    }
 }
