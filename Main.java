@@ -21,6 +21,9 @@ public class Main {
 	
 	// static variables and constants only here.
 
+	public static String startWord;
+	public static String endWord;
+
 	static Set<String> dict;
 
 	public static void main(String[] args) throws Exception {
@@ -53,7 +56,13 @@ public class Main {
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
 		// TO DO
-		return parseLine(keyboard.nextLine());
+		ArrayList<String> results = parseLine(keyboard.nextLine());
+		if(results.size() == 0){
+			System.exit(0);
+		}
+		startWord = results.get(0);
+		endWord = results.get(1);
+		return results;
 	}
 
 	public static ArrayList<String> parseLine(String line) {
@@ -91,7 +100,7 @@ public class Main {
 		visited.add(start);
 
 		ArrayList<String> neighbors = getNeighbors(start);
-		String[] filteredNeighbors = filterOutMoreDifferentiatedStrings(end, neighbors.toArray(new String[neighbors.size()]), lastDiff);
+		ArrayList<String> filteredNeighbors = filterOutMoreDifferentiatedStrings(end, neighbors, lastDiff);
 
 		for(String newNode : filteredNeighbors){
 			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, getDifference(newNode, end), visited);
@@ -153,15 +162,23 @@ public class Main {
 		return count;
 	}
 
-	public static String[] filterOutMoreDifferentiatedStrings(String start, String[] list, int lastDiff){
+	public static ArrayList<String> filterOutMoreDifferentiatedStrings(String end, ArrayList<String> list, int lastDiff){
+		//Comparator<String> comparator = Comparator.comparing(n -> getDifference(n, end));
+		Collections.sort(list, Comparator.comparing(n -> getDifference(n, end)));
+		return list;
+
+
+/*
 		ArrayList<String> result = new ArrayList<>();
 		for (String tar: list) {
-			if(getDifference(start, tar) <= lastDiff){
+			if(getDifference(end, tar) <= lastDiff){
 				result.add(tar);
 			}
 		}
 		String[] arr = new String[result.size()];
 		return result.toArray(arr);
+
+*/
 	}
 
     /**
@@ -170,7 +187,6 @@ public class Main {
      * @return	a list of neighbors.
      */
     private static ArrayList<String> getNeighbors(String word){
-    	Set<String> dict = makeDictionary();
     	ArrayList<String> neighbors = new ArrayList<String>();
     	Iterator itr= dict.iterator();
     	String next;
