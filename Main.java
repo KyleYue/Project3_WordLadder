@@ -115,6 +115,7 @@ public class Main {
 		if(list == null){
 			return new ArrayList<String>();
 		}
+		ladderFound = true;
 		return list;
 	}
 	
@@ -256,7 +257,7 @@ public class Main {
 	 * @param end	the end word
 	 * @return		difference between the start word and the end word.
 	 */
-	private static int getDifference(String start, String end){
+	public static int getDifference(String start, String end){
 		int size1 = start.length();
 		int size2 = end.length();
 		int smallerSize = size1 > size2 ? size2 : size1;
@@ -276,7 +277,7 @@ public class Main {
 	 * @return		a sorted list of neighbors.
 	 */
 
-	private static ArrayList<String> sortNeighbors(String end, ArrayList<String> list){
+	public static ArrayList<String> sortNeighbors(String end, ArrayList<String> list){
 		Collections.sort(list, Comparator.comparing(n -> getDifference(n, end)));
 		return list;
 	}
