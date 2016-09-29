@@ -22,6 +22,7 @@ public class Main {
 	// static variables and constants only here.
 	static Set<String> dict;
 	static String START,END;
+	static boolean ladderFound;
 
 	public static void main(String[] args) throws Exception {
 		
@@ -46,11 +47,14 @@ public class Main {
 		System.out.println("Depth first search: ");
 		printLadder(getWordLadderDFS(inputs.get(0),inputs.get(1)));
 	}
-	
+	/**
+	 * Initialize the static variables and the dictionary
+	 */
 	public static void initialize() {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		ladderFound= false;
 		START="notAssigned";
 		END="notAssigned";
 		dict = makeDictionary();
@@ -69,7 +73,11 @@ public class Main {
 		}
 		return results;
 	}
-
+	/**
+	 * parse a line of inputs into words. 
+	 * @param line  input line
+	 * @return		an arraylist of words.
+	 */
 	public static ArrayList<String> parseLine(String line) {
 		ArrayList<String> inputs = new ArrayList<String>(Arrays.asList((line.toLowerCase()).split("[^a-zA-Z/]+")));
 		for (String word: inputs) {
@@ -79,20 +87,26 @@ public class Main {
 		}
 		return inputs;
 	}
-
+	/**
+	 * Thie method find the word ladder from the start word to the end word using depth first search.
+	 * It uses a visited set to keep track of words visited. Since this method uses recursion, the set 
+	 * is passed to every instances. If one word is not the end word, its first neighbor will be explored.
+	 * The neighbors are defined as words that are one character different from the original word. The neighbors
+	 * are ordered their difference with the end word. An array is constructed to back track the ladder.
+	 * @param start the starting word
+	 * @param end	the ending word
+	 * @return		an arraylist of Strings that is the ladder from the start to the end word.
+	 */
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
+		ladderFound= false;
 		START = start;
 		END = end;
-		if(start==null || end==null)
-			return null;
 		if(start.equals(end)){
-			ArrayList<String> output = new ArrayList<String>();
-			output.add(start);
-			output.add(end);
-			return output;
+			ladderFound=true;
+			return new ArrayList<String>();
 		}
 		Set<String> visited = new HashSet<>();
 		ArrayList<String> ladder = new ArrayList<>();
@@ -100,15 +114,24 @@ public class Main {
 		ArrayList<String> list = getWordLadderDFSRec(start, end, visited);
 		return list;
 	}
+	
+	/**
+	 * The recursion method for the getWordLadderDFS() method.
+	 * @param start	the starting word
+	 * @param end	the ending word
+	 * @param visited	a visited set to keep track of visited words
+	 * @return		an arraylist of Strings that is the ladder from the start to the end word.
+	 */
 
 	private static ArrayList<String> getWordLadderDFSRec(String start, String end, Set<String> visited){
 		if(start.equals(end)){
 			ArrayList<String> ladder = new ArrayList<>();
 			ladder.add(start);
+			ladderFound=true;
 			return ladder;
 		}
 		if(visited.contains(start)){
-			return null;
+			return new ArrayList<String>();
 		}
 
 		visited.add(start);
@@ -118,31 +141,33 @@ public class Main {
 
 		for(String newNode : filteredNeighbors){
 			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, visited);
-			if(fromChildren == null){
+
+			if(fromChildren.size()==0){
 				continue;
 			}
 			fromChildren.add(0, start);
 			return fromChildren;
 		}
-		return null;
+		return new ArrayList<String>();
 	}
 	
 	/**
-	 * Get the word Ladder from the start word and the end word.
+	 * Get the word Ladder using breadth first search from the start word and the end word. This method use
+	 * a visited set to keep track of words visited. Uses a map to store track information and then reconstruct
+	 * the ladder with a helper method (getLadder). A queue is used to store words to be explored. If one word
+	 * is not the end word, its neighbors will be added to the queue. Neighbors are defined as words that only 
+	 * differ from the origin word by letter character. 
 	 * @param start the start word of the ladder.
 	 * @param end	the end word of the ladder.
 	 * @return		the an Arraylist<String> of word ladder.
 	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
+    	ladderFound= false;
 		START = start;
 		END = end;
-		if(start==null || end==null)
-			return null;
 		if(start.equals(end)){
-			ArrayList<String> output = new ArrayList<String>();
-			output.add(start);
-			output.add(end);
-			return output;
+			ladderFound=true;
+			return new ArrayList<String>();
 		}
 		Queue<String> q = new LinkedList<String>();
 		Set<String> visited = new HashSet<String>();
@@ -150,7 +175,6 @@ public class Main {
 		ArrayList<String> neighbors;
 		Iterator<String> itr;
 		String current,next;
-		boolean ladderFound=false;
 		q.add(start);
 		visited.add(start);
 		while(!q.isEmpty()){
@@ -173,13 +197,13 @@ public class Main {
 		if(ladderFound)
 			return getLadder(connect,end);
 		else{
-			return null;
+			return new ArrayList<String>();
 		}
 	}
     
     /**
      * Construct a dictionary
-     * @return
+     * @return	a dictionary in a set
      */
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
@@ -198,20 +222,23 @@ public class Main {
 	}
 	
 	/**
+	 * This method prints out the word ladder from a arraylist
 	 * @param	ladder  word ladder between the start and the finish word, including the start and finish word.
 	 * ladder size small than 2 indicates a code problem. The method will return after printing out a 
 	 * "Invalid ladder" message. 
 	 */
 	
 	public static void printLadder(ArrayList<String> ladder){
-		if(ladder==null){
+		if(!ladderFound){
 			System.out.println("no word ladder can be found between " + START+" and "+END+".");
 			return;
 		}
 		int ladderHeight = ladder.size();
-		if(ladderHeight<2)
-			throw new IllegalArgumentException("Illegal ladder arraylist input, ladder length shuold be larger than 1.");
-		else{
+		if(ladderFound &&ladderHeight<2){
+			System.out.println("a 0-rung word ladder exists between "+START+" and "+END +" .");
+			return;
+		}
+		if(ladderFound&&ladderHeight>2){
 			System.out.println("a "+(ladderHeight-2)+"-rung word ladder exists between "+START+" and "+END +" .");
 			for(int i=0; i<ladderHeight; i++){
 				System.out.println(ladder.get(i));
@@ -238,6 +265,13 @@ public class Main {
 		}
 		return count;
 	}
+	
+	/**
+	 * This method sorts the neighbors
+	 * @param end	the end word
+	 * @param list	a list of neighbors 
+	 * @return		a sorted list of neighbors.
+	 */
 
 	public static ArrayList<String> sortNeighbors(String end, ArrayList<String> list){
 		Collections.sort(list, Comparator.comparing(n -> getDifference(n, end)));
