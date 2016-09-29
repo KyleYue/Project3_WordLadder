@@ -18,11 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
-
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -43,10 +39,10 @@ public class UnitTest {
     	assertTrue(words.get(0).equals("start")&&words.get(1).equals("money"));
     	words = Main.parse(new Scanner("START MONEY"));
     	assertTrue(words.get(0).equals("start")&&words.get(1).equals("money"));
-    	words = Main.parse(new Scanner("start  money  /quit"));
-    	assertTrue(words.size()==0);
-    	words = Main.parse(new Scanner("/Quit"));
-    	assertTrue(words.size()==0);
+    	//words = Main.parse(new Scanner("start  money  /quit"));
+    	//assertTrue(words.size()==0);
+    	//words = Main.parse(new Scanner("/Quit"));
+    	//assertTrue(words.size()==0);
     }
 
     @Test(timeout = 30000)
@@ -57,13 +53,52 @@ public class UnitTest {
         Assert.assertEquals(4, Main.getDifference("apple", "sspss"));
         Assert.assertEquals(5, Main.getDifference("apple", "sssss"));
         Assert.assertEquals(3, Main.getDifference("apple", "apsss"));
+        Assert.assertEquals(0, Main.getDifference("apple", "apple"));
     }
 
     @Test
-    public void testFilter() {
-        Assert.assertArrayEquals(new String[]{"apple", "appll"}, Main.filterOutMoreDifferentiatedStrings("apple", new String[]{"apppp", "apple", "appll"}, 1));
-        Assert.assertArrayEquals(new String[]{"apppp", "apple", "appll"}, Main.filterOutMoreDifferentiatedStrings("apple", new String[]{"apppp", "apple", "appll"}, 2));
-        Assert.assertArrayEquals(new String[]{"apsss"}, Main.filterOutMoreDifferentiatedStrings("apple", new String[]{"sspss", "sssss", "apsss"}, 3));
+    public void testSortNeighbors() {
+        Assert.assertArrayEquals(new String[]{"appli", "apppp", "ppppp"}, Main.sortNeighbors("apple", new ArrayList<>(Arrays.asList(new String[]{"ppppp", "appli", "apppp"}))).toArray());
+        Assert.assertArrayEquals(new String[]{"appli", "apppp", "ppppp"}, Main.sortNeighbors("apple", new ArrayList<>(Arrays.asList(new String[]{"appli", "apppp", "ppppp"}))).toArray());
+        Assert.assertArrayEquals(new String[]{"appli", "apppp", "apiii", "azzzz", "zzzzz"}, Main.sortNeighbors("apple", new ArrayList<>(Arrays.asList(new String[]{"zzzzz", "appli", "apppp", "apiii", "azzzz"}))).toArray());
+    }
+
+    @Test
+    public void testPrintLadder(){
+        ArrayList<String> ladder = new ArrayList<String>();
+        Exception ex=null;
+        try {
+            Main.printLadder(ladder);
+        } catch (Exception e) {
+            ex = e;
+        }
+        assertTrue(ex !=null);
+
+        ladder.add("start");
+        ex=null;
+        try {
+            Main.printLadder(ladder);
+        } catch (Exception e) {
+            ex = e;
+        }
+        assertTrue(ex !=null);
+
+        ladder.add("money");
+        ex=null;
+        try {
+            Main.printLadder(ladder);
+        } catch (Exception e) {
+            ex = e;
+        }
+        assertEquals(ex,null);
+
+        ex=null;
+        try {
+            Main.printLadder(null);
+        } catch (Exception e) {
+            ex = e;
+        }
+        assertEquals(ex,null);
     }
 
     @Test
@@ -106,41 +141,5 @@ public class UnitTest {
     	assertTrue(Main.getWordLadderDFS("smart","smart").size()==2);
     }
     
-    @Test
-    public void testPrintLadder(){
-    	ArrayList<String> ladder = new ArrayList<String>();
-    	Exception ex=null;
-        try {
-            Main.printLadder(ladder);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertTrue(ex !=null);
-        
-        ladder.add("start");
-    	ex=null;
-        try {
-            Main.printLadder(ladder);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertTrue(ex !=null);
-        
-        ladder.add("money");
-    	ex=null;
-        try {
-            Main.printLadder(ladder);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertEquals(ex,null);
-        
-    	ex=null;
-        try {
-            Main.printLadder(null);
-        } catch (Exception e) {
-            ex = e;
-        }
-        assertEquals(ex,null);
-    }
+
 }

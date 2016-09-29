@@ -20,7 +20,6 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
-
 	static Set<String> dict;
 	static String START,END;
 
@@ -64,7 +63,11 @@ public class Main {
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
 		// TO DO
-		return parseLine(keyboard.nextLine());
+		ArrayList<String> results = parseLine(keyboard.nextLine());
+		if(results.size() == 0){
+			System.exit(0);
+		}
+		return results;
 	}
 
 	public static ArrayList<String> parseLine(String line) {
@@ -94,12 +97,11 @@ public class Main {
 		Set<String> visited = new HashSet<>();
 		ArrayList<String> ladder = new ArrayList<>();
 		ladder.add(start);
-		int diff = getDifference(start, end);
-		ArrayList<String> list = getWordLadderDFSRec(start, end, diff, visited);
+		ArrayList<String> list = getWordLadderDFSRec(start, end, visited);
 		return list;
 	}
 
-	private static ArrayList<String> getWordLadderDFSRec(String start, String end, int lastDiff, Set<String> visited){
+	private static ArrayList<String> getWordLadderDFSRec(String start, String end, Set<String> visited){
 		if(start.equals(end)){
 			ArrayList<String> ladder = new ArrayList<>();
 			ladder.add(start);
@@ -112,10 +114,10 @@ public class Main {
 		visited.add(start);
 
 		ArrayList<String> neighbors = getNeighbors(start);
-		String[] filteredNeighbors = filterOutMoreDifferentiatedStrings(end, neighbors.toArray(new String[neighbors.size()]), lastDiff);
+		ArrayList<String> filteredNeighbors = sortNeighbors(end, neighbors);
 
 		for(String newNode : filteredNeighbors){
-			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, getDifference(newNode, end), visited);
+			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, visited);
 			if(fromChildren == null){
 				continue;
 			}
@@ -237,15 +239,9 @@ public class Main {
 		return count;
 	}
 
-	public static String[] filterOutMoreDifferentiatedStrings(String start, String[] list, int lastDiff){
-		ArrayList<String> result = new ArrayList<>();
-		for (String tar: list) {
-			if(getDifference(start, tar) <= lastDiff){
-				result.add(tar);
-			}
-		}
-		String[] arr = new String[result.size()];
-		return result.toArray(arr);
+	public static ArrayList<String> sortNeighbors(String end, ArrayList<String> list){
+		Collections.sort(list, Comparator.comparing(n -> getDifference(n, end)));
+		return list;
 	}
 
     /**
