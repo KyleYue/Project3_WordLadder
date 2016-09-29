@@ -115,19 +115,79 @@ public class UnitTest {
     public void testBFS(){
     	assertTrue(Main.getWordLadderBFS("start", "start").size()==0);
     	assertTrue(Main.getWordLadderBFS("bazoo", "habit").size()==0);
-    	assertTrue(Main.getWordLadderBFS("smart", "money").contains("smart"));
-    	assertTrue(Main.getWordLadderBFS("smart", "money").size()>2);
-    	assertTrue(Main.getWordLadderBFS("smart", "money").contains("money"));
+
+        ArrayList<String> startMoney = Main.getWordLadderBFS("smart", "money");
+    	assertTrue(startMoney.contains("smart"));
+    	assertTrue(startMoney.size()>2);
+    	assertTrue(startMoney.contains("money"));
+
+        ArrayList<String> stoneMoney = Main.getWordLadderBFS("stone", "money");
+        assertTrue(stoneMoney.contains("stone"));
+        assertTrue(stoneMoney.size()>2);
+        assertTrue(stoneMoney.contains("money"));
     }
     
     @Test
     public void testDFS(){
     	assertTrue(Main.getWordLadderDFS("start", "start").size()==0);
     	assertTrue(Main.getWordLadderDFS("bazoo", "habit").size()==0);
-    	assertTrue(Main.getWordLadderDFS("smart", "money").contains("smart"));
-    	assertTrue(Main.getWordLadderDFS("smart", "money").size()>2);
-    	assertTrue(Main.getWordLadderDFS("smart", "money").contains("money"));
-    }
-    
 
+        ArrayList<String> startMoney = Main.getWordLadderBFS("smart", "money");
+        assertTrue(startMoney.contains("smart"));
+        assertTrue(startMoney.size()>2);
+        assertTrue(startMoney.contains("money"));
+
+        ArrayList<String> stoneMoney = Main.getWordLadderBFS("stone", "money");
+        assertTrue(stoneMoney.contains("stone"));
+        assertTrue(stoneMoney.size()>2);
+        assertTrue(stoneMoney.contains("money"));
+    }
+
+    @Test(timeout = 30000)
+    public void testBFSNoDuplicates1() {
+        ArrayList<String> list = Main.getWordLadderBFS("start", "start");
+        Assert.assertEquals(list.size(), new HashSet(list).size());
+    }
+
+    @Test(timeout = 30000)
+    public void testBFSNoDuplicates2() {
+        ArrayList<String> list = Main.getWordLadderBFS("bazoo", "habit");
+        Assert.assertEquals(list.size(), new HashSet(list).size());
+    }
+
+    @Test(timeout = 30000)
+    public void testBFSNoDuplicates3() {
+        ArrayList<String> list = Main.getWordLadderBFS("smart", "money");
+        Assert.assertEquals(list.size(), new HashSet(list).size());
+    }
+
+    @Test(timeout = 30000)
+    public void testBFSNoDuplicates4() {
+        ArrayList<String> list = Main.getWordLadderBFS("stone", "money");
+        Assert.assertEquals(list.size(), new HashSet(list).size());
+    }
+
+    @Test(timeout = 30000)
+    public void testDFSNoDuplicates1() {
+        ArrayList<String> list = Main.getWordLadderDFS("start", "start");
+        Assert.assertEquals(list.size(), new HashSet(list).size());
+    }
+
+    @Test(timeout = 30000)
+    public void testDFSNoDuplicates2() {
+        ArrayList<String> list = Main.getWordLadderDFS("bazoo", "habit");
+        Assert.assertEquals(list.size(), new HashSet(list).size());
+    }
+
+    @Test(timeout = 30000)
+    public void testDFSNoDuplicates3() {
+        ArrayList<String> list = Main.getWordLadderDFS("smart", "money");
+        Assert.assertEquals(list.size(), new HashSet(list).size());
+    }
+
+    @Test(timeout = 30000)
+    public void testDFSNoDuplicates4() {
+        ArrayList<String> list = Main.getWordLadderDFS("stone", "money");
+        Assert.assertEquals(list.size(), new HashSet(list).size());
+    }
 }
