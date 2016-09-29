@@ -66,13 +66,11 @@ public class UnitTest {
         	int i2 = randomGenerator.nextInt(dictString.length);
         	String word1 = dictString[i1].toLowerCase();
         	String word2 = dictString[i2].toLowerCase();
-        	System.out.println(word1 +"   "+ word2);
         	if(Main.getWordLadderBFS(word1,word2).size()==0)
         		BFSNullCounter++;
         	if(Main.getWordLadderDFS(word1,word2).size()==0)
         		DFSNullCounter++;
     	}
-    	System.out.println("BFS null times: "+BFSNullCounter +". DFS null times: "+DFSNullCounter+".");
     	assertEquals(BFSNullCounter,DFSNullCounter);
     }
     
