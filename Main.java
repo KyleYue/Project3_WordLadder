@@ -38,7 +38,7 @@ public class Main {
 			ps = System.out;			// default to Stdout
 		}
 		initialize();
-		
+
 		ArrayList<String> inputs = parse(kb);
 		if (inputs.size()<2)
 			return;
