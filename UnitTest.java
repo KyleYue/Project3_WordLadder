@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import static org.junit.Assert.*;
 
@@ -66,19 +67,17 @@ public class UnitTest {
     	Random randomGenerator = new Random();
     	Set<String> dict = Main.makeDictionary();
     	String[] dictString =dict.toArray(new String[dict.size()]);
-    	int BFSNullCounter=0;
-    	int DFSNullCounter=0;
     	for(int i=0; i<10; i++){
         	int i1 = randomGenerator.nextInt(dictString.length);
         	int i2 = randomGenerator.nextInt(dictString.length);
         	String word1 = dictString[i1].toLowerCase();
         	String word2 = dictString[i2].toLowerCase();
-        	if(Main.getWordLadderBFS(word1,word2).size()==0)
-        		BFSNullCounter++;
-        	if(Main.getWordLadderDFS(word1,word2).size()==0)
-        		DFSNullCounter++;
+            ArrayList<String> bfs = Main.getWordLadderBFS(word1,word2);
+            ArrayList<String> dfs = Main.getWordLadderDFS(word1,word2);
+
+            Assert.assertTrue((bfs.size()==0 && dfs.size()==0) || (bfs.size()!=0 && dfs.size()!=0));
+            Assert.assertTrue((bfs.size()==0 && dfs.size()==0) || (bfs.size() <= dfs.size()));
     	}
-    	assertEquals(BFSNullCounter,DFSNullCounter);
     }
     
     @Test 
