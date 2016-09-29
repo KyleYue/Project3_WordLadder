@@ -114,7 +114,7 @@ public class Main {
 		visited.add(start);
 
 		ArrayList<String> neighbors = getNeighbors(start);
-		ArrayList<String> filteredNeighbors = filterOutMoreDifferentiatedStrings(end, neighbors);
+		ArrayList<String> filteredNeighbors = sortNeighbors(end, neighbors);
 
 		for(String newNode : filteredNeighbors){
 			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, visited);
@@ -239,23 +239,9 @@ public class Main {
 		return count;
 	}
 
-	public static ArrayList<String> filterOutMoreDifferentiatedStrings(String end, ArrayList<String> list){
-		//Comparator<String> comparator = Comparator.comparing(n -> getDifference(n, end));
+	public static ArrayList<String> sortNeighbors(String end, ArrayList<String> list){
 		Collections.sort(list, Comparator.comparing(n -> getDifference(n, end)));
 		return list;
-
-
-/*
-		ArrayList<String> result = new ArrayList<>();
-		for (String tar: list) {
-			if(getDifference(end, tar) <= lastDiff){
-				result.add(tar);
-			}
-		}
-		String[] arr = new String[result.size()];
-		return result.toArray(arr);
-
-*/
 	}
 
     /**
