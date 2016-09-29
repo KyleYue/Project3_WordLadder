@@ -78,7 +78,7 @@ public class Main {
 	 * @param line  input line
 	 * @return		an arraylist of words.
 	 */
-	public static ArrayList<String> parseLine(String line) {
+	private static ArrayList<String> parseLine(String line) {
 		ArrayList<String> inputs = new ArrayList<String>(Arrays.asList((line.toLowerCase()).split("[^a-zA-Z/]+")));
 		for (String word: inputs) {
 			if(word.equals("/quit")){
@@ -112,6 +112,9 @@ public class Main {
 		ArrayList<String> ladder = new ArrayList<>();
 		ladder.add(start);
 		ArrayList<String> list = getWordLadderDFSRec(start, end, visited);
+		if(list == null){
+			return new ArrayList<String>();
+		}
 		return list;
 	}
 	
@@ -131,7 +134,7 @@ public class Main {
 			return ladder;
 		}
 		if(visited.contains(start)){
-			return new ArrayList<String>();
+			return null;
 		}
 
 		visited.add(start);
@@ -142,13 +145,13 @@ public class Main {
 		for(String newNode : filteredNeighbors){
 			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, visited);
 
-			if(fromChildren.size()==0){
+			if(fromChildren == null){
 				continue;
 			}
 			fromChildren.add(0, start);
 			return fromChildren;
 		}
-		return new ArrayList<String>();
+		return null;
 	}
 	
 	/**
@@ -253,7 +256,7 @@ public class Main {
 	 * @param end	the end word
 	 * @return		difference between the start word and the end word.
 	 */
-	public static int getDifference(String start, String end){
+	private static int getDifference(String start, String end){
 		int size1 = start.length();
 		int size2 = end.length();
 		int smallerSize = size1 > size2 ? size2 : size1;
@@ -273,7 +276,7 @@ public class Main {
 	 * @return		a sorted list of neighbors.
 	 */
 
-	public static ArrayList<String> sortNeighbors(String end, ArrayList<String> list){
+	private static ArrayList<String> sortNeighbors(String end, ArrayList<String> list){
 		Collections.sort(list, Comparator.comparing(n -> getDifference(n, end)));
 		return list;
 	}
