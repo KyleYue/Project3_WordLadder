@@ -143,7 +143,8 @@ public class Main {
 		ArrayList<String> neighbors = getNeighbors(start);
 		ArrayList<String> filteredNeighbors = sortNeighbors(end, neighbors);
 
-		for(String newNode : filteredNeighbors){
+		for(int i = 0; i < filteredNeighbors.size(); i++){
+			String newNode = filteredNeighbors.get(i);
 			ArrayList<String> fromChildren = getWordLadderDFSRec(newNode, end, visited);
 
 			if(fromChildren == null){
